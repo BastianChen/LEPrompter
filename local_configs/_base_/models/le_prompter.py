@@ -1,9 +1,9 @@
 # model settings
 norm_cfg = dict(type='BN', requires_grad=True)
 prompts_steps = 50000
-use_center_points = True  # use center_points or random_points
+use_center_points = False  # use center_points or random_points
 use_filled_mask = False   # use filled_mask or unfilled_mask
-use_prompts = [True, True, True]  # use points, boxes and masks
+use_prompts = [True, False, False]  # use points, boxes and masks
 model = dict(
     type='EncoderDecoder',
     pretrained=None,

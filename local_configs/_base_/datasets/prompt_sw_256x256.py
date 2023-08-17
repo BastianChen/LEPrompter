@@ -1,4 +1,4 @@
-from local_configs.leformer.le_prompter_256x256_sw_160k import train_step1_steps
+from local_configs.leprompter.le_prompter_256x256_sw_160k import train_step1_steps
 from local_configs._base_.models.le_prompter import use_center_points as ucp
 from local_configs._base_.models.le_prompter import use_filled_mask as ufm
 
