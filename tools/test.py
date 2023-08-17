@@ -317,5 +317,6 @@ def main():
                 # remove tmp dir when cityscapes evaluation
                 shutil.rmtree(tmpdir)
 
+
 if __name__ == '__main__':
     main()

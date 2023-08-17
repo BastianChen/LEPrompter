@@ -4,12 +4,8 @@ import os
 import random
 import numpy as np
 from tqdm import tqdm
-from scipy.ndimage import label, center_of_mass
 from scipy.spatial.distance import cdist
-from scipy.spatial import distance_matrix
-from scipy.ndimage import binary_dilation
-from sklearn.cluster import KMeans, DBSCAN
-from scipy import ndimage
+from sklearn.cluster import DBSCAN
 
 
 def parse_args():
