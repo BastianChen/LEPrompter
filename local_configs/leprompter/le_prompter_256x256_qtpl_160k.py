@@ -34,6 +34,5 @@ lr_config = dict(
 samples_per_gpu = 16
 workers_per_gpu = 4
 # train_step1_step会比sam_leformer中的prompts_steps先降到0，加上35可以让train_step1_step后降到0
-# train_step1_step = prompts_steps * samples_per_gpu + 35
 train_step1_steps = prompts_steps * workers_per_gpu + 35
 data = dict(samples_per_gpu=samples_per_gpu, workers_per_gpu=workers_per_gpu)
