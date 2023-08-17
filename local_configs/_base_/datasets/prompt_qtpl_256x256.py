@@ -5,9 +5,6 @@ from local_configs._base_.models.le_prompter import use_filled_mask as ufm
 # dataset settings
 dataset_type = 'PromptQTPLDataset'
 data_root = '/home/ubuntu/datasets/leformer/QTPL'
-# data_root = '/gpfs/home/chenben/datasets/test/QTPL'
-# img_norm_cfg_ = dict(
-#     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53, 0, 0, 0],
     std=[58.395, 57.12, 57.375, 1, 1, 1],

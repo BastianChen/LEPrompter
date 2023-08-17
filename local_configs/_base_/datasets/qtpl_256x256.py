@@ -1,7 +1,6 @@
 # dataset settings
 dataset_type = 'QTPLDataset'
 data_root = '/home/ubuntu/datasets/leformer/QTPL'
-# data_root = '/gpfs/home/chenben/datasets/test/QTPL'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=False)
 crop_size = (256, 256)
@@ -22,12 +21,8 @@ test_pipeline = [
     dict(
         type='MultiScaleFlipAug',
         img_scale=(256, 256),
-        # img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
         flip=False,
         transforms=[
-            # dict(type='Resize', keep_ratio=True),
-            # dict(type='ResizeToMultiple', size_divisor=32),
-            # dict(type='RandomFlip'),
             dict(type='Normalize', **img_norm_cfg),
             dict(type='ImageToTensor', keys=['img']),
             dict(type='Collect', keys=['img']),
