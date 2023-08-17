@@ -2,10 +2,12 @@
 
 [//]: # (![]&#40;resources/overall_architecture_diagram.jpg&#41;)
 <p align="center">
-    <img src="./resources/overall_architecture_diagram.jpg">
+    <img src="./resources/overall_architecture_diagram.png">
 </p>
 
 Figure 1: Overview architecture of LEPrompter with three main modules. (a) A prompt dataset that contains prior information. (b) A prompt encoder that extracts strong prior prompt information features. (c) A lightweight decoder that fuses the prompt tokens from the prompt encoder and the image embedding from the Vision Image Encoder to generate the final lake mask.
+
+The repository contains official PyTorch implementations of training and evaluation codes and pre-trained models for **LEPrompter**.
 
 The code is based on [MMSegmentaion v0.30.0](https://github.com/open-mmlab/MMSegmentation/tree/v0.30.0).
 
@@ -13,7 +15,7 @@ The code is based on [MMSegmentaion v0.30.0](https://github.com/open-mmlab/MMSeg
 
 For install and data preparation, please refer to the guidelines in [MMSegmentation v0.30.0](https://github.com/open-mmlab/mmsegmentation/tree/v0.30.0).
 
-An example (works for me): ```CUDA 11.3``` and  ```pytorch 1.12.0``` 
+An example (works for me): ```CUDA 11.6``` and  ```pytorch 1.11.0``` 
 
 ```
 pip install -U openmim
@@ -23,22 +25,7 @@ cd LEFormer && pip install -e . --user
 
 ## Datasets Preparation
 
-[//]: # (The Surface Water dataset &#40;SW dataset&#41; and Qinghai-Tibet Plateau Lake dataset &#40;QTPL dataset&#41; can be  download from [here]&#40;https://pan.baidu.com/s/1H2d6h3p3PtZw-g7PhNx9Tw?pwd=p0t7&#41;. )
 After the paper has been accepted, we will make the download links for the Surface Water dataset (SW dataset) and the Qinghai-Tibet Plateau Lake dataset (QTPL dataset) that we used available.
-
-The structure of datasets are aligned as follows:
-```
-SW or QTPL
-├── annotations
-│　　├── training 
-│　　└── validation 
-├── binary_annotations
-│　　├── training 
-│　　└── validation 
-└── images  
- 　　├── training 
-　 　└── validation 
-```
 
 ### Split Dataset
 Alternatively, the datasets can be recreated to randomly split the datasets into training and testing sets, based on the original datasets.  
@@ -58,60 +45,42 @@ python tools/data_split.py --dataset_type qtpl --dataset_path /path/to/your/Lake
 ```
 ### Create Prompt Dataset
 
+The structure of prompt datasets are aligned as follows:
+```
+SW or QTPL
+├── annotations
+│   ├── training 
+│   └── validation 
+├── binary_annotations
+│   ├── training 
+│   └── validation 
+├── images  
+│   ├── training 
+│   └── validation 
+└── prompts  
+    └── training  
+```
+
+Example: create ```Surface Water Prompt Dataset```:
+```python
+python tools/gen_prompt_datasets.py --dataset_path /path/to/your/surface_water/
+```
+
 ## Training
 
-We use 1 GPU for training by default. Make sure you have modified the `data_root` variable in [sw_256x256.py](local_configs/_base_/datasets/prompt_sw_256x256.py) or [qtpl_256x256.py](local_configs/_base_/datasets/qtpl_256x256.py).    
+We use 1 GPU for training by default. Make sure you have modified the `data_root` variable in [prompt_sw_256x256.py](local_configs/_base_/datasets/prompt_sw_256x256.py) or [prompt_qtpl_256x256.py](local_configs/_base_/datasets/prompt_qtpl_256x256.py).    
 
-Example: train ```LEFormer``` on ```Surface Water```:
+Example: train ```LEPrompter``` on ```Surface Water Prompt Dataset```:
 
 ```python
-python tools/train.py local_configs/leformer/leformer_256x256_sw_160k.py
+python tools/train.py local_configs/leprompter/leprompter_256x256_sw_160k.py
 ```
 
 ## Evaluation
-To evaluate the model. Make sure you have modified the `data_root` variable in [sw_256x256.py](local_configs/_base_/datasets/sw_256x256.py) or [qtpl_256x256.py](local_configs/_base_/datasets/qtpl_256x256.py).  
+To evaluate the model. Make sure you have modified the `data_root` variable in [sw_256x256.py](configs/_base_/datasets/sw_256x256.py) or [qtpl_256x256.py](configs/_base_/datasets/qtpl_256x256.py).  
 
-Example: evaluate ```LEFormer``` on ```Surface Water```:
-
-```python
-python tools/test.py local_configs/leformer/leformer_256x256_sw_160k.py local_configs/pretrained_models/leformer_sw.pth --eval mIoU mFscore
-```
-
-## FLOPs
-
-To calculate FLOPs for a model.
-
-Example: calculate ```LEFormer``` on ```Surface Water```:
+Example: evaluate ```LEPrompter``` on ```Surface Water Prompt Dataset```:
 
 ```python
-python tools/get_flops.py local_configs/leformer/leformer_256x256_sw_160k.py --shape 256 256
+python tools/test.py configs/leformer/leformer_256x256_sw_160k.py /path/to/your/pretrained_model --eval mIoU mFscore
 ```
-
-## Acknowledgment
-
-Our implementation is mainly based on [MMSegmentaion](https://github.com/open-mmlab/mmsegmentation/tree/v0.30.0), [Segformer](https://github.com/NVlabs/SegFormer) and [PoolFormer](https://github.com/sail-sg/poolformer). Thanks for their authors.
-
-
-[//]: # (## LICENSE)
-
-[//]: # ()
-[//]: # (This repo is under the Apache-2.0 license. For commercial use, please contact the authors. )
-
-
-## Supplement 
-### Quantitative results of ablation study
-
-<p align="center">
-    <img src="./resources/ablation_study_1.jpg" height="600">
-</p>
-
-Figure 2: Visualization results of ablation studies on the number of Pooling Transformer Layers. **_L_** denotes the number of Pooling Transformer Layer.
-
-<p align="center">
-    <img src="./resources/ablation_study_2.jpg" height="550">
-</p>
-
-<p align="center">
-    Figure 3: Visualization results of ablation studies on the CE, MSCA, TE and pooling operator modules.
-</p>
-
