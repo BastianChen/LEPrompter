@@ -57,6 +57,7 @@ if __name__ == '__main__':
 
             if len(centers) == 0:
                 save_empty_prompts(save_path, gt_file_name, np.zeros((256, 256)))
+                continue
 
             # For each cluster, find the 9 points closest to the centroid and mark them as points of that cluster
             center_points = []

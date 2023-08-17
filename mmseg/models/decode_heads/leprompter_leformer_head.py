@@ -88,7 +88,7 @@ from mmseg.ops import resize
 # from torch import nn
 from mmcv.cnn.bricks import build_activation_layer, build_norm_layer
 from ..utils import nchw_to_nlc, nlc_to_nchw
-from .le_prompter_head import LEPrompterHead
+from .leprompter_head import LEPrompterHead
 
 
 @HEADS.register_module()

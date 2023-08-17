@@ -1,7 +1,7 @@
-from local_configs._base_.models.le_prompter import prompts_steps
+from local_configs._base_.models.leprompter import prompts_steps
 
 _base_ = [
-    '../_base_/models/le_prompter.py', '../_base_/datasets/prompt_sw_256x256.py',
+    '../_base_/models/leprompter.py', '../_base_/datasets/prompt_qtpl_256x256.py',
     '../_base_/default_runtime.py', '../_base_/schedules/schedule_160k.py'
 ]
 
@@ -37,4 +37,3 @@ workers_per_gpu = 4
 # Adding 35 can ensure that train_step1_step drops to 0 afterwards.
 train_step1_steps = prompts_steps * workers_per_gpu + 35
 data = dict(samples_per_gpu=samples_per_gpu, workers_per_gpu=workers_per_gpu)
-

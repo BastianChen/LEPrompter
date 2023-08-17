@@ -1,6 +1,6 @@
 _base_ = [
     '../_base_/models/leformer.py', '../_base_/datasets/qtpl_256x256.py',
-    '../_base_/default_runtime.py', '../_base_/schedules/schedule_20k.py'
+    '../_base_/default_runtime.py', '../_base_/schedules/schedule_160k.py'
 ]
 
 model = dict(pretrained=None, decode_head=dict(num_classes=2))

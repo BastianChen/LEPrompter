@@ -11,9 +11,6 @@ from mmcv.cnn.bricks import build_activation_layer, build_norm_layer
 from ..utils import nchw_to_nlc, nlc_to_nchw
 
 
-# from .common import LayerNorm2d
-
-
 class MLPBlock(nn.Module):
     def __init__(self, embedding_dim, mlp_dim, act_cfg):
         super().__init__()
@@ -68,7 +65,6 @@ class ImagePromptTransformer(nn.Module):
             stride=sr_ratio)
         self.norm_sr1 = build_norm_layer(norm_cfg, embedding_dim)[1]
         self.norm_sr2 = build_norm_layer(norm_cfg, embedding_dim)[1]
-        # self.norm_final_attn = build_norm_layer(norm_cfg, embedding_dim)[1]
 
     def forward(self, image_embedding, point_embedding, mask_embedding=None):
         """
@@ -90,7 +86,6 @@ class ImagePromptTransformer(nn.Module):
         if point_embedding is None:
             mask_embedding = self.sr2(mask_embedding)
             point_embedding = self.norm_sr2(nchw_to_nlc(mask_embedding))
-            # point_embedding = image_embedding
 
         # Prepare queries
         queries = point_embedding
@@ -130,11 +125,7 @@ class ImagePromptAttentionBlock(nn.Module):
         self.attn = nn.MultiheadAttention(embedding_dim, num_heads)
         point_embeddings = [build_norm_layer(norm_cfg, embedding_dim)[1] for _ in range(4)]
         self.norm_layers = ModuleList(point_embeddings)
-        # self.norm1 = build_norm_layer(norm_cfg, embedding_dim)[1]
-        # self.norm2 = build_norm_layer(norm_cfg, embedding_dim)[1]
         self.mlp = MLPBlock(embedding_dim, mlp_dim, activation)
-        # self.norm3 = build_norm_layer(norm_cfg, embedding_dim)[1]
-        # self.norm4 = build_norm_layer(norm_cfg, embedding_dim)[1]
         self.skip_first_layer_pe = skip_first_layer_pe
 
     def forward(self, queries, keys, values):
@@ -149,27 +140,23 @@ class ImagePromptAttentionBlock(nn.Module):
             q = queries + values
             attn_out = self.attn(query=q, key=q, value=queries)[0]
             queries = queries + attn_out
-        # queries = self.norm1(queries)
         queries = self.norm_layers[0](queries)
 
         # Cross attention block, tokens attending to image embedding
         q = queries + values
         attn_out = self.attn(query=q, key=keys, value=keys)[0]
         queries = queries + attn_out
-        # queries = self.norm2(queries)
         queries = self.norm_layers[1](queries)
 
         # MLP block
         mlp_out = self.mlp(queries)
         queries = queries + mlp_out
-        # queries = self.norm3(queries)
         queries = self.norm_layers[2](queries)
 
         # Cross attention block, image embedding attending to tokens
         q = queries + values
         attn_out = self.attn(query=keys, key=q, value=queries)[0]
         keys = keys + attn_out
-        # keys = self.norm4(keys)
         keys = self.norm_layers[3](keys)
 
         return queries, keys, values

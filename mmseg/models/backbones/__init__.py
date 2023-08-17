@@ -22,10 +22,8 @@ from .twins import PCPVT, SVT
 from .unet import UNet
 from .vit import VisionTransformer
 from .leformer import LEFormer
-from .prompt_leformer import PromptLEFormer
-from .le_prompter_backbone import LEPrompter
-from .prompt_mit import PromptMixVisionTransformer
-from .prompt_mscan import PromptMSCAN
+from .leprompter_leformer import PromptLEFormer
+from .leprompter_backbone import LEPrompter
 
 __all__ = [
     'ResNet', 'ResNetV1c', 'ResNetV1d', 'ResNeXt', 'HRNet', 'FastSCNN',
@@ -33,5 +31,5 @@ __all__ = [
     'VisionTransformer', 'SwinTransformer', 'MixVisionTransformer',
     'BiSeNetV1', 'BiSeNetV2', 'ICNet', 'TIMMBackbone', 'ERFNet', 'PCPVT',
     'SVT', 'STDCNet', 'STDCContextPathNet', 'BEiT', 'MAE', 'MSCAN', 'LEFormer',
-    'LEPrompter', 'PromptLEFormer', 'PromptMixVisionTransformer', 'PromptMSCAN'
+    'LEPrompter', 'PromptLEFormer'
 ]

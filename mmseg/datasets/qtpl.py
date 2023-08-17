@@ -63,7 +63,6 @@ class PromptQTPLDataset(CustomDataset):
         if self.test_mode:
             return self.prepare_test_img(idx)
         else:
-            # print(f"********{self.prompts_steps}")
             if self.prompts_steps >= 0:
                 self.prompts_steps -= 1
             return self.prepare_train_img(idx)
@@ -84,7 +83,6 @@ class PromptQTPLDataset(CustomDataset):
         results = dict(img_info=img_info, ann_info=ann_info)
         self.pre_pipeline(results)
         return self.pipeline2(results) if self.prompts_steps < 0 else self.pipeline1(results)
-        # return self.pipeline(results)
 
     def prepare_test_img(self, idx):
         """Get testing data after pipeline.
@@ -101,4 +99,3 @@ class PromptQTPLDataset(CustomDataset):
         results = dict(img_info=img_info)
         self.pre_pipeline(results)
         return self.pipeline1(results)
-        # return self.pipeline(results)
