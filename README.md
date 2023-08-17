@@ -60,7 +60,7 @@ python tools/data_split.py --dataset_type qtpl --dataset_path /path/to/your/Lake
 
 ## Training
 
-We use 1 GPU for training by default. Make sure you have modified the `data_root` variable in [sw_256x256.py](local_configs/_base_/datasets/sw_256x256.py) or [qtpl_256x256.py](local_configs/_base_/datasets/qtpl_256x256.py).    
+We use 1 GPU for training by default. Make sure you have modified the `data_root` variable in [sw_256x256.py](local_configs/_base_/datasets/prompt_sw_256x256.py) or [qtpl_256x256.py](local_configs/_base_/datasets/qtpl_256x256.py).    
 
 Example: train ```LEFormer``` on ```Surface Water```:
 
