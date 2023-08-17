@@ -1,15 +1,11 @@
-# LEFormer: A Hybrid CNN-Transformer Architecture for Accurate Lake Extraction from Remote Sensing Imagery
+# High-Fidelity Lake Extraction via Two-Stage Prompt Enhancement: Establishing a Novel Baseline and Benchmark
 
 [//]: # (![]&#40;resources/overall_architecture_diagram.jpg&#41;)
 <p align="center">
     <img src="./resources/overall_architecture_diagram.jpg">
 </p>
 
-Figure 1: Overview architecture of LEFormer, consisting of four modules: (1) a hierarchical CNN encoder that extracts local features; (2) a  hierarchical Transformer encoder that captures global features; (3) a  cross-encoder fusion module that modulates local and global features from CNN and Transformer encoders; (4) a lightweight decoder that fuses the multi-scale features from the cross-encoder fusion module to predict the lake mask accurately.
-
-The repository contains official PyTorch implementations of training and evaluation codes and pre-trained models for **LEFormer**.
-
-[//]: # (The paper is in [Here]&#40;https://arxiv.org/pdf/2209.08575.pdf&#41;.)
+Figure 1: Overview architecture of LEPrompter with three main modules. (a) A prompt dataset that contains prior information. (b) A prompt encoder that extracts strong prior prompt information features. (c) A lightweight decoder that fuses the prompt tokens from the prompt encoder and the image embedding from the Vision Image Encoder to generate the final lake mask.
 
 The code is based on [MMSegmentaion v0.30.0](https://github.com/open-mmlab/MMSegmentation/tree/v0.30.0).
 
@@ -17,7 +13,7 @@ The code is based on [MMSegmentaion v0.30.0](https://github.com/open-mmlab/MMSeg
 
 For install and data preparation, please refer to the guidelines in [MMSegmentation v0.30.0](https://github.com/open-mmlab/mmsegmentation/tree/v0.30.0).
 
-An example (works for me): ```CUDA 10.1``` and  ```pytorch 1.6.0``` 
+An example (works for me): ```CUDA 11.3``` and  ```pytorch 1.12.0``` 
 
 ```
 pip install -U openmim
@@ -43,6 +39,8 @@ SW or QTPL
  　　├── training 
 　 　└── validation 
 ```
+
+### Split Dataset
 Alternatively, the datasets can be recreated to randomly split the datasets into training and testing sets, based on the original datasets.  
 
 The original SW dataset is freely available for download [here](https://aistudio.baidu.com/aistudio/datasetdetail/75148).
@@ -58,7 +56,7 @@ Example: split ```Qinghai-Tibet Plateau Lake```:
 ```python
 python tools/data_split.py --dataset_type qtpl --dataset_path /path/to/your/LakeWater --save_path /path/to/save/dataset
 ```
-
+### Create Prompt Dataset
 
 ## Training
 
