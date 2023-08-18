@@ -23,8 +23,7 @@ cd LEFormer && pip install -e . --user
 ```
 
 ## Pretrained Weights
-Due to the size limitation of 50MB for the Supplementary Material, we are currently unable to provide the pretrained weights.  
-After the paper has been accepted, we will make the download links for the pretrained weights available.
+Due to the size limitation of 50MB for the Supplementary Material, we are currently unable to provide the pretrained weights. After the paper has been accepted, we will make the download links for the pretrained weights available.
 
 
 ## Datasets Preparation
