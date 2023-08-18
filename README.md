@@ -1,6 +1,5 @@
 # High-Fidelity Lake Extraction via Two-Stage Prompt Enhancement: Establishing a Novel Baseline and Benchmark
 
-[//]: # (![]&#40;resources/overall_architecture_diagram.jpg&#41;)
 <p align="center">
     <img src="./resources/overall_architecture_diagram.png">
 </p>
@@ -22,6 +21,11 @@ pip install -U openmim
 mim install mmcv-full
 cd LEFormer && pip install -e . --user
 ```
+
+## Pretrained Weights
+Due to the size limitation of 50MB for the Supplementary Material, we are currently unable to provide the pretrained weights.  
+After the paper has been accepted, we will make the download links for the pretrained weights available.
+
 
 ## Datasets Preparation
 
