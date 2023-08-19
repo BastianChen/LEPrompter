@@ -50,7 +50,7 @@ python tools/data_split.py --dataset_type qtpl --dataset_path /path/to/your/Lake
 
 The structure of prompt datasets are aligned as follows:
 ```
-SW or QTPL
+SW or QTPL prompt dataset
 ├── annotations
 │   ├── training 
 │   └── validation 
