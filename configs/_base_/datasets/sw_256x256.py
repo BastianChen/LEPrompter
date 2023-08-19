@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = 'SurfaceWaterDataset'
-data_root = '/home/ubuntu/datasets/leformer/SW'
+data_root = 'data/SW'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=False)
 crop_size = (256, 256)
