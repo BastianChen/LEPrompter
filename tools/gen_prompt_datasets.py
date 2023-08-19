@@ -25,7 +25,7 @@ if __name__ == '__main__':
     # Set up paths for dataset and prompt output
     dataset_path = args.dataset_path
     gt_dataset_path = os.path.join(dataset_path, "binary_annotations/training")
-    save_path = os.path.join(dataset_path, "prompts_test/training")
+    save_path = os.path.join(dataset_path, "prompts/training")
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
