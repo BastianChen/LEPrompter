@@ -89,3 +89,9 @@ python tools/test.py configs/leformer/leformer_256x256_sw_160k.py /path/to/your/
 ```
 ## Supplement 
 ### User Study
+
+<p align="center">
+    <img src="./resources/user_study_interface.png">
+</p>
+
+Figure 2: User Study Interface: Example of the user study interface. Based on the Ground Truth on the left, the user selects the image that most closely resembles the Ground Truth.
