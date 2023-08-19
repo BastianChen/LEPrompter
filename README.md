@@ -28,7 +28,7 @@ Due to the size limitation of 50MB for the Supplementary Material, we are curren
 
 ## Datasets Preparation
 
-After the paper has been accepted, we will make the download links for the Surface Water dataset (SW dataset) and the Qinghai-Tibet Plateau Lake dataset (QTPL dataset) that we used available.
+After the paper has been accepted, we will make the download links for datasets that we used available.
 
 ### Split Dataset
 Alternatively, the datasets can be recreated to randomly split the datasets into training and testing sets, based on the original datasets.  
