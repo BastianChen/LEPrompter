@@ -83,24 +83,25 @@ from mmcv.cnn import ConvModule
 
 from mmseg.models.builder import HEADS
 from mmseg.models.decode_heads.decode_head import BaseDecodeHead
-from mmcv.runner import ModuleList
 from mmseg.ops import resize
-# from torch import nn
-from mmcv.cnn.bricks import build_activation_layer, build_norm_layer
-from ..utils import nchw_to_nlc, nlc_to_nchw
+from ..utils import nlc_to_nchw
 from .leprompter_head import LEPrompterHead
 
 
 @HEADS.register_module()
 class PromptLEFormerHead(BaseDecodeHead):
-    """The all mlp Head of segformer.
-
-    This head is the implementation of
-    `Segformer <https://arxiv.org/abs/2105.15203>` _.
+    """The implementation of LEPrompter with the head of LEFormer.
 
     Args:
         interpolate_mode: The interpolate mode of MLP head upsample operation.
             Default: 'bilinear'.
+        depth: The block number of ImagePromptAttentionBlock.
+        embedding_dim (int): the channel dimension of the embeddings.
+        num_heads (int): the number of heads in the attention layers.
+        mlp_dim (int): the hidden dimension of the mlp block.
+        prompts_steps (int): the number of steps in the prompt-based stage.
+        use_prompts (Sequence[bool]): the combination of prompts.
+        sr_ratio (int): The ratio of spatial reduction of Efficient Multi-head Attention. Default: 4.
     """
 
     def __init__(self, interpolate_mode='bilinear', depth=2, embedding_dim=192, num_heads=2, mlp_dim=64,
@@ -128,8 +129,6 @@ class PromptLEFormerHead(BaseDecodeHead):
             out_channels=self.channels,
             kernel_size=1,
             norm_cfg=self.norm_cfg)
-        # self.prompt_image_attention_decoder = ImagePromptAttentionLayer(depth, embedding_dim, num_heads, mlp_dim,
-        #                                                                   sr_ratio)
 
         if self.training:
             self.fusion_image_prompts_conv = ConvModule(

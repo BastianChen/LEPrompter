@@ -87,3 +87,5 @@ Example: evaluate ```LEPrompter``` on ```Surface Water Prompt Dataset```:
 ```python
 python tools/test.py configs/leformer/leformer_256x256_sw_160k.py /path/to/your/pretrained_model --eval mIoU mFscore
 ```
+## Supplement 
+### User Study

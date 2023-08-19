@@ -1,16 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
-import random
 import warnings
-from collections import OrderedDict
 
 import torch
 import torch.nn as nn
 import torch.utils.checkpoint as cp
-import torchvision.transforms as transforms
 from typing import Sequence
 from mmcv.cnn import Conv2d
-from mmcv.cnn.bricks.drop import build_dropout
 from mmcv.cnn.bricks.transformer import MultiheadAttention
 from mmcv.cnn.bricks import DropPath, build_activation_layer, build_norm_layer
 from mmcv.cnn.utils.weight_init import (constant_init, normal_init,
@@ -18,7 +14,6 @@ from mmcv.cnn.utils.weight_init import (constant_init, normal_init,
 from mmcv.runner import (BaseModule, ModuleList, Sequential, CheckpointLoader,
                          load_state_dict)
 
-from ...utils import get_root_logger
 from ..builder import BACKBONES
 from ..utils import PatchEmbed, nchw_to_nlc, nlc_to_nchw
 from .mit import MixFFN
@@ -543,11 +538,8 @@ class CnnEncoderLayer(BaseModule):
 
 @BACKBONES.register_module()
 class PromptLEFormer(BaseModule):
-    """The backbone of LEFormer.
+    """The implementation of LEPrompter with the backbone of LEFormer.
 
-    This backbone is the implementation of `LEFormer: Simple and
-    Efficient Design for Semantic Segmentation with
-    Transformers <https://arxiv.org/abs/2105.15203>`_.
     Args:
         in_channels (int): Number of input channels. Default: 3.
         embed_dims (int): Embedding dimension. Default: 32.
@@ -575,6 +567,10 @@ class PromptLEFormer(BaseModule):
         norm_cfg (dict): Config dict for normalization layer.
             Default: dict(type='LN')
         pool_numbers (int): the number of Pooling Transformer Layers. Default 1.
+        image_size (dict): the size of the input image.
+        use_prompts (Sequence[bool]): the combination of prompts.
+        prompts_steps (int): the number of steps in the prompt-based stage.
+        point_nums (int): the number of points in the point prompt.
         act_cfg (dict): The activation config for FFNs.
             Default: dict(type='GELU').
         pretrained (str, optional): model pretrained path. Default: None.

@@ -1,9 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import math
-import random
-import warnings
-from collections import OrderedDict
-
 import torch
 import torch.nn as nn
 
@@ -16,7 +11,7 @@ from ..builder import BACKBONES
 
 
 class DepthWiseConvModule(BaseModule):
-    """An implementation of one Depth-wise Conv Module of LEFormer.
+    """An implementation of one Depth-wise Conv Module of LEPrompter.
 
     Args:
         embed_dims (int): The feature dimension.
@@ -109,7 +104,6 @@ class LEPrompter(BaseModule):
     def __init__(
             self,
             embed_dim,
-            # image_embedding_size,
             input_image_size,
             mask_in_chans,
             point_nums=1,
@@ -120,16 +114,20 @@ class LEPrompter(BaseModule):
             act_cfg=dict(type='GELU'),
     ):
         """
-        Encodes prompts for input to SAM's mask decoder.
+        Encodes prompts for input to LEPrompter's mask decoder.
 
         Arguments:
           embed_dim (int): The prompts' embedding dimension
-          image_embedding_size (tuple(int, int)): The spatial size of the
-            image embedding, as (H, W).
           input_image_size (int): The padded size of the image as input
             to the image encoder, as (H, W).
           mask_in_chans (int): The number of hidden channels used for
             encoding input masks.
+          point_nums (int): the number of points in the point prompt.
+          kernel_size (int): The kernel size of Conv2d. Default: 3.
+          stride (int): The stride of Conv2d. Default: 2.
+          padding (int): The padding of Conv2d. Default: 0.
+          ffn_drop (float, optional): Probability of an element to be
+            zeroed in FFN. Default 0.0.
           activation (nn.Module): The activation to use when encoding
             input masks.
         """
@@ -230,6 +228,8 @@ class LEPrompter(BaseModule):
         embeddings.
 
         Arguments:
+          bs: batch size
+          device: device id
           points (tuple(torch.Tensor, torch.Tensor) or none): point coordinates to embed
           boxes (torch.Tensor or none): boxes to embed
           masks (torch.Tensor or none): masks to embed

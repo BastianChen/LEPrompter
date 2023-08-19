@@ -1,14 +1,10 @@
-import torch
-import torch.nn as nn
 from mmcv.cnn import ConvModule
 
 from mmseg.models.builder import HEADS
-from mmseg.models.decode_heads.decode_head import BaseDecodeHead
 from mmcv.runner import ModuleList
-from mmseg.ops import resize
 from torch import nn
 from mmcv.cnn.bricks import build_activation_layer, build_norm_layer
-from ..utils import nchw_to_nlc, nlc_to_nchw
+from ..utils import nchw_to_nlc
 
 
 class MLPBlock(nn.Module):
@@ -36,7 +32,9 @@ class ImagePromptTransformer(nn.Module):
           num_heads (int): the number of heads for multihead attention. Must
             divide embedding_dim
           mlp_dim (int): the channel dimension internal to the MLP block
+          sr_ratio (int): The ratio of spatial reduction of Efficient Multi-head Attention. Default: 4.
           activation (nn.Module): the activation to use in the MLP block
+          norm_cfg (dict): Config dict for normalization layer. Default: dict(type='LN')
         """
         super().__init__()
         self.layers = ModuleList()
@@ -73,13 +71,11 @@ class ImagePromptTransformer(nn.Module):
             B x embedding_dim x h x w for any h and w.
           point_embedding (torch.Tensor): the embedding to add to the query points.
             Must have shape B x N_points x embedding_dim for any N_points.
-          mask_embedding:
+          mask_embedding (torch.Tensor): the embedding of the mask prompt when only using the mask prompt.
 
         Returns:
-          torch.Tensor: the processed point_embedding
           torch.Tensor: the processed image_embedding
         """
-        # BxCxHxW -> BxHWxC == B x N_image_tokens x C
 
         image_embedding = self.sr1(image_embedding)
         image_embedding = self.norm_sr1(nchw_to_nlc(image_embedding))
@@ -120,6 +116,7 @@ class ImagePromptAttentionBlock(nn.Module):
           mlp_dim (int): the hidden dimension of the mlp block
           activation (nn.Module): the activation of the mlp block
           skip_first_layer_pe (bool): skip the PE on the first layer
+          norm_cfg (dict): Config dict for normalization layer. Default: dict(type='LN')
         """
         super().__init__()
         self.attn = nn.MultiheadAttention(embedding_dim, num_heads)
@@ -166,20 +163,14 @@ class ImagePromptAttentionBlock(nn.Module):
 class LEPrompterHead(nn.Module):
     def __init__(self, depth=2, embedding_dim=192, num_heads=4, mlp_dim=384, sr_ratio=4):
         """
-        Predicts masks given an image and prompt embeddings, using a
-        transformer architecture.
+        integrating image embedding with prompt tokens using a Transformer architecture.
 
         Arguments:
-          transformer_dim (int): the channel dimension of the transformer
-          transformer (nn.Module): the transformer used to predict masks
-          num_multimask_outputs (int): the number of masks to predict
-            when disambiguating masks
-          activation (nn.Module): the type of activation to use when
-            upscaling masks
-          iou_head_depth (int): the depth of the MLP used to predict
-            mask quality
-          iou_head_hidden_dim (int): the hidden dimension of the MLP
-            used to predict mask quality
+            depth (int): number of layers in the transformer
+            embedding_dim (int): the channel dimension of the embeddings
+            num_heads (int): the number of heads in the attention layers
+            mlp_dim (int): the hidden dimension of the mlp block
+            sr_ratio (int): The ratio of spatial reduction of Efficient Multi-head Attention.
         """
         super().__init__()
         self.transformer = ImagePromptTransformer(depth=depth, embedding_dim=embedding_dim, num_heads=num_heads,
@@ -195,16 +186,12 @@ class LEPrompterHead(nn.Module):
         Predict masks given image and prompt embeddings.
 
         Arguments:
-          image_embeddings (torch.Tensor): the embeddings from the image encoder
-          image_pe (torch.Tensor): positional encoding with the shape of image_embeddings
-          sparse_prompt_embeddings (torch.Tensor): the embeddings of the points and boxes
-          dense_prompt_embeddings (torch.Tensor): the embeddings of the mask inputs
-          multimask_output (bool): Whether to return multiple masks or a single
-            mask.
+            image_embeddings (torch.Tensor): the embeddings from the image encoder
+            sparse_prompt_embeddings (torch.Tensor): the embeddings of the points and boxes
+            dense_prompt_embeddings (torch.Tensor): the embeddings of the mask inputs
 
         Returns:
-          torch.Tensor: batched predicted masks
-          torch.Tensor: batched predictions of mask quality
+          torch.Tensor: the output token after fusing image embedding with prompt tokens.
         """
 
         if dense_prompt_embeddings is not None and sparse_prompt_embeddings is not None:
