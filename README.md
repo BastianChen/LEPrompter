@@ -82,7 +82,7 @@ python tools/train.py local_configs/leprompter/leprompter_256x256_sw_160k.py
 ## Evaluation
 To evaluate the model. Make sure you have modified the `data_root` variable in [sw_256x256.py](configs/_base_/datasets/sw_256x256.py) or [qtpl_256x256.py](configs/_base_/datasets/qtpl_256x256.py).  
 
-Example: evaluate ```LEPrompter``` on ```Surface Water Prompt Dataset```:
+Example: evaluate ```LEFormer``` on ```Surface Water Dataset```:
 
 ```python
 python tools/test.py configs/leformer/leformer_256x256_sw_160k.py /path/to/your/pretrained_model --eval mIoU mFscore
