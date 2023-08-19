@@ -89,7 +89,7 @@ python tools/test.py configs/leformer/leformer_256x256_sw_160k.py /path/to/your/
 ```
 ## Supplement 
 ### User Study
-During the user study, we recruited 15 participants, obtained their consent, and had them sign the ```Lake Extraction Model Subjective Evaluation Agreement```. The specific details of the agreement will be made public after the acceptance of the paper. The following image shows our User Study Interface:
+During the user study, we recruited 15 participants, obtained their consent, and had them sign the ```Lake Extraction Model Subjective Evaluation Agreement```. The specific details of the agreement will be made public after the acceptance of the paper. The following image shows our ```User Study Interface```:
 
 <p align="center">
     <img src="./resources/user_study_interface.png">
