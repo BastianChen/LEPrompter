@@ -10,7 +10,7 @@ Figure 1: Visualization images of the prompt dataset for lake extraction. (a) Ex
     <img src="./resources/overall_architecture_diagram.png">
 </p>
 
-Figure 2: Overview architecture of LEPrompter with three main modules. (a) A prompt dataset that contains prior information. (b) A prompt encoder that extracts strong prior prompt information features. (c) A lightweight decoder that fuses the prompt tokens from the prompt encoder and the image embedding from the Vision Image Encoder to generate the final lake mask.
+Figure 2: Overview architecture of LEPrompter with three main modules. (a) A prompt dataset that contains prior information. (b) A lightweight prompt encoder that extracts strong prior prompt information features. (c) A lightweight prompt decoder that fuses the prompt tokens from the prompt encoder and the image embedding from the Vision Image Encoder.
 
 The repository contains official PyTorch implementations of training and evaluation codes and pre-trained models for **LEPrompter**.
 
