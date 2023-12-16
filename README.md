@@ -34,8 +34,7 @@ Due to the size limitation of 20MB for the Supplementary Material, we are curren
 
 ## Datasets Preparation
 
-### Split Dataset
-Alternatively, the datasets can be recreated to randomly split the datasets into training and testing sets, based on the original datasets.  
+### Split Dataset 
 
 The original SW dataset is freely available for download [here](https://aistudio.baidu.com/aistudio/datasetdetail/75148).
 
