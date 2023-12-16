@@ -97,12 +97,12 @@ class LoadImageAndPromptFromFile(object):
                 np.uint8)
             mask_prompt = np.expand_dims(mask_prompt, axis=-1)
             if (point_prompt == box_prompt).all() and (box_prompt == mask_prompt).all():
-                prompts = np.zeros((256, 256, 3))
+                prompts = np.zeros((img.shape[0], img.shape[1], 3))
                 img_prompt = np.concatenate([img, prompts], axis=-1)
             else:
                 img_prompt = np.concatenate([img, point_prompt, box_prompt, mask_prompt], axis=-1)
         else:
-            prompts = np.zeros((256, 256, 3))
+            prompts = np.zeros((img.shape[0], img.shape[1], 3))
             img_prompt = np.concatenate([img, prompts], axis=-1)
 
         results['filename'] = filename

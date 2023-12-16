@@ -34,6 +34,7 @@ if __name__ == '__main__':
     for gt_file_name in tqdm(gt_file_names):
         gt_file_path = os.path.join(gt_dataset_path, gt_file_name)
         img = cv2.imread(gt_file_path, 0)
+        h, w = img.shape
 
         # Find coordinates of all 1-pixel points
         points = np.argwhere(img == 1)
@@ -41,7 +42,7 @@ if __name__ == '__main__':
         num_points = len(points)
         if num_points == 0:
             # Save original image if no 1-pixel points found
-            save_empty_prompts(save_path, gt_file_name, np.zeros((256, 256)))
+            save_empty_prompts(save_path, gt_file_name, np.zeros((h, w)))
         else:
             # Use DBSCAN algorithm to cluster the data into different groups
             dbscan = DBSCAN(eps=8, min_samples=9).fit(points)
@@ -56,7 +57,7 @@ if __name__ == '__main__':
                 centers.append(center)
 
             if len(centers) == 0:
-                save_empty_prompts(save_path, gt_file_name, np.zeros((256, 256)))
+                save_empty_prompts(save_path, gt_file_name, np.zeros((h, w)))
                 continue
 
             # For each cluster, find the 9 points closest to the centroid and mark them as points of that cluster
@@ -72,18 +73,18 @@ if __name__ == '__main__':
             random_points = points[np.random.choice(points.shape[0], 9, replace=False)]
 
             # Create image with point prompt
-            point_img = np.zeros((2, 256, 256))
+            point_img = np.zeros((2, h, w))
             random_x = np.random.randint(-20, 20, len(center_points))
             random_y = np.random.randint(-20, 20, len(center_points))
             center_y, center_x = np.array(center_points).T
-            x = np.clip(center_x + random_x, 0, 255)
-            y = np.clip(center_y + random_y, 0, 255)
+            x = np.clip(center_x + random_x, 0, w - 1)
+            y = np.clip(center_y + random_y, 0, h - 1)
             point_img[0][random_points[:, 0], random_points[:, 1]] = 255
             for i in range(len(center_points)):
                 while point_img[1][y[i]][x[i]] == 255:
                     random_x[i], random_y[i] = np.random.randint(-20, 20, 2)
-                    x[i] = np.clip(center_x[i] + random_x[i], 0, 255)
-                    y[i] = np.clip(center_y[i] + random_y[i], 0, 255)
+                    x[i] = np.clip(center_x[i] + random_x[i], 0, w - 1)
+                    y[i] = np.clip(center_y[i] + random_y[i], 0, h - 1)
                 point_img[1][y[i]][x[i]] = 255
 
             # Find bounding box for 1 data block
@@ -91,18 +92,18 @@ if __name__ == '__main__':
             max_x, max_y = np.max(points[:, 0]), np.max(points[:, 1])
 
             # Create image with bounding box prompt
-            bbox_img = np.zeros((256, 256))
+            bbox_img = np.zeros((h, w))
             bbox_img[min_x][min_y] = bbox_img[max_x][max_y] = 255
 
             # Create image with mask prompt(multiple random points)
-            pre_mask_img = np.zeros((256, 256))
+            pre_mask_img = np.zeros((h, w))
             num_selected = int(num_points * 0.008)
             selected_points = random.sample(points.tolist(), num_selected)
             for point in selected_points:
                 random_x = random.randint(-5, 5)
                 random_y = random.randint(-5, 5)
-                x = np.clip(point[1] + random_x, 0, 255)
-                y = np.clip(point[0] + random_y, 0, 255)
+                x = np.clip(point[1] + random_x, 0, w - 1)
+                y = np.clip(point[0] + random_y, 0, h - 1)
                 cv2.circle(pre_mask_img, (x, y), 1, 1, -1)
 
             # Dilate and close morphological operations to clean up the mask
@@ -113,14 +114,14 @@ if __name__ == '__main__':
             # Draw contours and fill pixels inside contours on a black image to create a lower-precision ground truth
             contours, hierarchy = cv2.findContours(pre_mask_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
             pre_mask_img = np.where(pre_mask_img == 1, 255, 0)
-            mask_img = np.zeros((256, 256), dtype=np.uint8)
+            mask_img = np.zeros((h, w), dtype=np.uint8)
             cv2.drawContours(mask_img, contours, -1, 255, thickness=-1)
 
             # Using Mask Images to Reduce Accuracy
             mask = np.ones((32, 32), dtype=np.float32)
-            mask = cv2.resize(mask, (256, 256))
+            mask = cv2.resize(mask, (w, h))
             mask = cv2.resize(mask, (32, 32), interpolation=cv2.INTER_NEAREST)
-            mask = cv2.resize(mask, (256, 256), interpolation=cv2.INTER_NEAREST)
+            mask = cv2.resize(mask, (w, h), interpolation=cv2.INTER_NEAREST)
             mask_img = mask_img * mask
 
             # Expanding and corroding the contour, causing the boundary to become tortuous

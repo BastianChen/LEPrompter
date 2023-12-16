@@ -143,8 +143,6 @@ class PromptLEFormerHead(BaseDecodeHead):
             self.sr_ratio = sr_ratio
 
     def forward(self, inputs):
-        # self.training = True
-
         if self.prompts_steps < 0:
             self.training = False
         elif self.prompts_steps >= 0 and self.training:

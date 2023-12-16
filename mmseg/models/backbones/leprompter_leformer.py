@@ -698,9 +698,6 @@ class PromptLEFormer(BaseModule):
                     bias=True)
             )
 
-        # self.prompts_enconder_layer = PromptEncoderLayer(embed_dims_list[-1], image_size, embed_dims_list[0],
-        #                                                  point_nums=point_nums)
-
         if self.training:
             self.le_prompter = LEPrompter(embed_dims_list[-1], image_size, embed_dims_list[0],
                                           point_nums=point_nums)
