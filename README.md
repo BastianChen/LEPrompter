@@ -1,5 +1,7 @@
 # High-Fidelity Lake Extraction via Two-Stage Prompt Enhancement: Establishing a Novel Baseline and Benchmark
 
+> The repository contains official PyTorch implementations of training and evaluation codes and pre-trained models for our ICME 2024 paper [LEPrompter](https://arxiv.org/abs/2308.08443).
+
 <p align="center">
     <img src="./resources/prompt_dataset.png">
 </p>
@@ -7,12 +9,10 @@
 Figure 1: Visualization images of the prompt dataset for lake extraction. (a) Example images of the original image and ground truth. (b) Example images depicting two types of point prompts: random points and center points. (c) Example images illustrating box prompt. (d) Example images showcasing two types of mask prompts: filled mask and unfilled .
 
 <p align="center">
-    <img src="./resources/overall_architecture_diagram.png">
+    <img src="./resources/leprompter_decoder.png">
 </p>
 
 Figure 2: Overview architecture of LEPrompter with three main modules. (a) A prompt dataset that contains prior information. (b) A lightweight prompt encoder that extracts strong prior prompt information features. (c) A lightweight prompt decoder that fuses the prompt tokens from the prompt encoder and the image embedding from the Vision Image Encoder.
-
-The repository contains official PyTorch implementations of training and evaluation codes and pre-trained models for **LEPrompter**.
 
 The code is based on [MMSegmentaion v0.30.0](https://github.com/open-mmlab/MMSegmentation/tree/v0.30.0).
 
@@ -27,10 +27,6 @@ pip install -U openmim
 mim install mmcv-full
 cd LEFormer && pip install -e . --user
 ```
-
-## Pretrained Weights
-Due to the size limitation of 20MB for the Supplementary Material, we are currently unable to provide the pretrained weights. After the paper has been accepted, we will make the download links for the pretrained weights available.
-
 
 ## Datasets Preparation
 
