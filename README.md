@@ -86,3 +86,27 @@ Example: evaluate ```LEFormer``` on ```Surface Water Dataset```:
 ```python
 python tools/test.py configs/leformer/leformer_256x256_sw_160k.py /path/to/your/pretrained_model --eval mIoU mFscore
 ```
+
+## Acknowledgment
+
+Our implementation is mainly based on [MMSegmentaion](https://github.com/open-mmlab/mmsegmentation/tree/v0.30.0), [LEFormer](https://github.com/BastianChen/LEFormer). Thanks for their authors.
+
+
+## LICENSE
+
+
+This repo is under the Apache-2.0 license. For commercial use, please contact the authors. 
+
+
+## Citation information
+
+If you use our code or otherwise find this work useful, please cite our paper:
+
+```text
+@article{leprompter,
+  title={High-Fidelity Lake Extraction via Two-Stage Prompt Enhancement: Establishing a Novel Baseline and Benchmark}, 
+  author={Ben Chen and Xuechao Zou and Kai Li and Yu Zhang and Junliang Xing and Pin Tao},
+  year={2023},
+  journal={arXiv:2308.08443}
+}
+```
