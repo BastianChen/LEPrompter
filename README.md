@@ -12,7 +12,7 @@ Figure 1: Visualization images of the prompt dataset for lake extraction. (a) Ex
     <img src="./resources/leprompter_decoder.png">
 </p>
 
-Figure 2: Overview architecture of LEPrompter with three main modules. (a) A prompt dataset that contains prior information. (b) A lightweight prompt encoder that extracts strong prior prompt information features. (c) A lightweight prompt decoder that fuses the prompt tokens from the prompt encoder and the image embedding from the Vision Image Encoder.
+Figure 2: Overview architecture of our proposed enhancement framework LEPrompter and lightweight prompt decoder.
 
 The code is based on [MMSegmentaion v0.30.0](https://github.com/open-mmlab/MMSegmentation/tree/v0.30.0).
 
