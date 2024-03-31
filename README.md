@@ -84,7 +84,7 @@ To evaluate the model. Make sure you have modified the `data_root` variable in [
 Example: evaluate ```LEFormer``` on ```Surface Water Dataset```:
 
 ```python
-python tools/test.py configs/leformer/leformer_256x256_sw_160k.py /path/to/your/pretrained_model --eval mIoU mFscore
+python tools/test.py configs/leformer/leformer_256x256_sw_160k.py local_configs/pretrained_models/leformer_sw.pth --eval mIoU mFscore
 ```
 
 ## Acknowledgment
