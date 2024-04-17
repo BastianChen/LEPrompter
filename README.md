@@ -25,7 +25,7 @@ An example (works for me): ```CUDA 11.6``` and  ```pytorch 1.11.0```
 ```
 pip install -U openmim
 mim install mmcv-full
-cd LEFormer && pip install -e . --user
+cd LEPrompter && pip install -e . --user
 ```
 
 ## Datasets Preparation
